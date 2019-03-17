@@ -49,11 +49,13 @@ exports.postCreateNewLesson = (req, res) => {
                             const newPath = 'public' + savePath;
                             fs.rename(oldPath, newPath, err => {
                                 if (!err) {
+                                    var date = new Date(fields.startDate);
                                     const newLesson = new lessonModel({
                                         name: fields.lessonName,
                                         content: fields.lessonContent,
                                         slides: { name: file.lessonSlide.name, url: savePath },
                                         course: req.query.courseId,
+                                        date: date.getDate() + ' - ' + date.getDay() + ' - ' + date.getFullYear(),
                                         instructor: req.user._id
                                     });
                                     newLesson.save((err, lesson) => {
@@ -64,10 +66,13 @@ exports.postCreateNewLesson = (req, res) => {
                                 }
                             });
                         } else {
+                            var date = new Date(fields.startDate);
+                            // console.log(date.getDay().toString());
                             const newLesson = new lessonModel({
                                 name: fields.lessonName,
                                 content: fields.lessonContent,
                                 course: req.query.courseId,
+                                date: date.getDate() + ' - ' + date.getDay() + ' - ' + date.getFullYear(),
                                 instructor: req.user._id
                             });
                             newLesson.save((err, lesson) => {

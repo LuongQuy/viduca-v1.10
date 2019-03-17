@@ -16,11 +16,13 @@ exports.getClassroom = (req, res, next) => {
                 if (lesson.participants.findIndex((participant) => {
                     return (req.user._id.equals(participant.student));
                 }) === -1) {
+                    var currentDate = new Date(Date.now());
                     lesson.update({
                         $push: {
                             participants: {
                                 student: req.user._id,
-                                join_time: Date.now()
+                                join_time: currentDate.getHours() + ' giờ' + currentDate.getMinutes() + ' phút '
+                                + currentDate.getDate() + ' - ' + currentDate.getMonth() + ' - ' + currentDate.getFullYear()
                             }
                         }
                     }).exec();

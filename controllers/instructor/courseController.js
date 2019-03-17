@@ -162,7 +162,7 @@ exports.getDeleteCourse = (req, res) => {
 }
 
 exports.getMyCourseInformation = (req, res) => {
-    courseModel.findById(req.query.courseId).where(approved, true).populate('instructor').exec((err, course) => {
+    courseModel.findById(req.query.courseId).where('approved', true).populate('instructor').exec((err, course) => {
         if (course) {
             if (req.user._id.equals(course.instructor._id)) {
                 res.render('instructor/my-course-information', { course: course, username: libary.getCurrentUser(req.user) });

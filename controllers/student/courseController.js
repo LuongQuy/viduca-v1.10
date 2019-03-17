@@ -2,19 +2,19 @@ const courseModel = require('../../models/course');
 const libary = require('../library');
 
 exports.getCourses = (req, res) => {
-    courseModel.find({}, (err, courses) => {
+    courseModel.find({approved: true}, (err, courses) => {
         res.render('student/courses', {title: 'Tất cả khóa học', courses: courses, username: libary.getCurrentUser(req.user) });
     });
 }
 
 exports.getMyCourses = (req, res) => {
-    courseModel.find({learner: req.user._id}, (err, courses) => {
+    courseModel.find({learner: req.user._id, approved: true}, (err, courses) => {
         res.render('student/courses', {title: 'Khóa học bạn đã đăng ký', courses: courses, username: libary.getCurrentUser(req.user) });
     });
 }
 
 exports.getCourseDetail = (req, res) => {
-    courseModel.findOne({ _id: req.query.courseId }).populate('instructor').exec((err, course) => {
+    courseModel.findOne({ _id: req.query.courseId, approved: true }).populate('instructor').exec((err, course) => {
         if (course) {
             var boolRegister = true;
             if(course.learner.toString().includes(req.user._id)){ boolRegister = false };
